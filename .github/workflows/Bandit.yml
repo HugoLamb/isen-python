@@ -19,4 +19,4 @@ jobs:
           pip install bandit
       - name: Run Bandit
         run: |
-          bandit - r . -ll --exclude integration_tests,unit_tests
+          bandit -r . -ll
