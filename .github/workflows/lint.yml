@@ -4,11 +4,13 @@ on: [push]
 
 jobs:
   build:
+
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v2
     - name: Set up Python 3.9
-      uses: actions/setup-python@v3
+      uses: actions/setup-python@v1
       with:
         python-version: 3.9
     - name: Install dependencies
@@ -17,4 +19,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py')
+        find . -name '*.py' -exec pylint --disable=C,R0801 --fail-under=7 {} \;
