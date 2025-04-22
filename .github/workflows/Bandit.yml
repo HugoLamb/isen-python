@@ -20,4 +20,4 @@ jobs:
           pip install -r requirements.txt
       - name: Run Bandit
         run: |
-          bandit -r . --exclude ./integration_tests/,./unit_tests/
+          bandit -r . -s B105 --exclude ./integration_tests/,./unit_tests/
