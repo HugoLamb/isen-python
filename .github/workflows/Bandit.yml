@@ -1,16 +1,17 @@
-name: Bandit Security Scan
+name: Bandit
 
-on: [push]
+on:
+  workflow_dispatch:
 
 jobs:
-  bandit:
-    name: Run Bandit Security Checks
+  analyze:
     runs-on: ubuntu-latest
+    permissions:
+      # required for all workflows
+      security-events: write
+      # only required for workflows in private repositories
+      actions: read
+      contents: read
     steps:
-      - uses: actions/checkout@v2
-      - name: Run bandit
-        uses: tj-actions/bandit@v5.1
-        with:
-          targets: |  # or a single string "." 
-            .
-          options: "-r --exclude integration_tests,unit_tests"
+      - name: Perform Bandit Analysis
+        uses: PyCQA/bandit-action@v1
