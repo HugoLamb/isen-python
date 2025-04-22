@@ -13,4 +13,4 @@ jobs:
         with:
           targets: |  # or a single string "." 
             .
-          options: "-r"
+          options: "-r --exclude integration_tests,unit_tests"
