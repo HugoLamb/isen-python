@@ -39,7 +39,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         continue-on-error: true
         with:
-          image-ref: ${{ secrets.DOCKER_USERNAME }}//isen-python:latest
+          image-ref: ${{ secrets.DOCKER_USERNAME }}/isen-python:latest
           severity: 'HIGH,CRITICAL'
           format: 'table'
           exit-code: '0'
@@ -47,12 +47,12 @@ jobs:
       - name: Generate SBOM from project files with Syft
         uses: anchore/sbom-action@v0
         with:
-          path: ./project
-          output-file: sbom.syft.json
+          image: ${{ secrets.DOCKER_USERNAME }}/isen-python:latest
+          output-file: syft.sbom.json
           format: syft-json
 
       - name: Upload SBOM as artifact
         uses: actions/upload-artifact@v4
         with:
-          name: sbom-syft
-          path: sbom.syft.json
+          name: syft-sbom
+          path: syft.sbom.json
