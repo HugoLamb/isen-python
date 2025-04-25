@@ -1,0 +1,41 @@
+name: Pytest
+
+on: [push]
+
+jobs:
+    UnitTests:
+        runs-on: ubuntu-latest
+        name: Unit tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v2
+              with:
+                  python-version: 3.9
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install pytest
+                pip install -r requirements.txt
+            - name: Run tests with pytest
+              run: |
+                pytest ./unit_tests
+    IntegrationTests:
+        runs-on: ubuntu-latest
+        name: Implementation tests
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+            - name: Set up Python 3.9
+              uses: actions/setup-python@v2
+              with:
+                  python-version: 3.9
+            - name: Install dependencies
+              run: |
+                python -m pip install --upgrade pip
+                pip install pytest
+                pip install -r requirements.txt
+            - name: Run tests with pytest
+              run: |
+                pytest ./integration_tests
