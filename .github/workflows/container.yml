@@ -44,24 +44,14 @@ jobs:
           format: 'table'
           exit-code: '0'
 
+      - name: Checkout repository
+        uses: actions/checkout@v4
       - name: Generate SBOM from project files with Syft
         uses: anchore/sbom-action@v0
         with:
           image: ${{ secrets.DOCKER_USERNAME }}/isen-python:latest
           output-file: syft.sbom.json
           format: syft-json
-
-      - name: Upload SBOM as artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: syft-sbom
-          path: syft.sbom.json
-
-      - name: Download SBOM artifact
-        uses: actions/download-artifact@v4
-        with:
-          name: syft-sbom
-          path: .
 
       - name: Scan SBOM with Grype
         continue-on-error: true
