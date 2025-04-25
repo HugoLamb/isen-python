@@ -193,34 +193,3 @@
 </section>
 {% endblock %}
 </div>
-
-<script>
-  function markFavourite(productId, isAdding) {
-    fetch(`/favorites/mark/${productId}/`, {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': getCookie('csrftoken'),
-        'Content-Type': 'application/json',
-      },
-    })
-    .then(data => {
-  const button = document.getElementById(`favBtn${productId}`);
-  
-  if (data.success) {
-    if (data.marked) {
-      button.innerHTML = `<i class="fas fa-heart fa-3x"></i> Remove from Favorites`;
-      button.style.color = 'red';
-    } else {
-      button.innerHTML = `<i class="fas fa-heart fa-3x"></i> Add to Favorites`;
-      button.style.color = ''; // Remove red color
-    }
-    window.location.reload();  // This should reload the page after both actions
-  } else {
-    alert("Error toggling favorite.");
-  }
-})
-
-  }
-
-
-</script>
