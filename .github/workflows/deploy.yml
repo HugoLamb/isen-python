@@ -1,0 +1,39 @@
+name: Build and Push Docker image to Artifact Registry
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: your-gcp-project-id
+  REGION: europe-west1
+  REPOSITORY: your-artifact-registry-repository
+  IMAGE: your-image-name
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ancient-wave-458212-n3
+          service_account_key: ${{ SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
+
+      - name: Configure Docker to use Artifact Registry
+        run: |
+          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+
+      - name: Build Docker image
+        run: |
+          docker build -t europe-west1-docker.pkg.dev/ancient-wave-458212-n3/docker-repo/isen-python:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push europe-west1-docker.pkg.dev/ancient-wave-458212-n3/docker-repo/isen-python:latest
