@@ -24,7 +24,7 @@ jobs:
         with:
           project_id: ancient-wave-458212-n3
           service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
+          export_default_credentials: true #ok
 
       - name: Configure Docker to use Artifact Registry
         run: |
