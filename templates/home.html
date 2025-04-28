@@ -103,14 +103,14 @@
               {% if user.is_authenticated %}
               <hr style="border: 2px solid white" />
               <div id="favBtnText{{ product.id }}">
-                {% if not product.is_favourite %}
-                <button onclick="markFavourite('{{ product.id }}', true)" id="favBtn{{ product.id }}"
+                {% if product.is_favourite %}
+                <button class="favBtn" onclick="markFavourite('{{ product.id }}', true)" id="favBtn{{ product.id }}"
                   style="background:none; border:none;">
                   <i class="fas fa-heart fa-3x"></i> Add to Favorites
                 </button>
                 {% endif %}
-                {% if product.is_favourite %}
-                <button onclick="markFavourite('{{ product.id }}', true)" id="favBtn{{ product.id }}"
+                {% if not product.is_favourite %}
+                <button class="favBtn" onclick="markFavourite('{{ product.id }}', true)" id="favBtn{{ product.id }}"
                   style="color:red; background:none; border:none;">
                   <i class="fas fa-heart fa-3x"></i> Remove from Favorites
                 </button>
