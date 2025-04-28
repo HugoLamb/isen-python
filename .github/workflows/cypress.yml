@@ -22,14 +22,10 @@ jobs:
 
       - name: Start Django server
         run: |
+          python3 manage.py migrate
           python3 manage.py runserver 0.0.0.0:8080 &
         env:
-          SECRET_KEY: dummy-secret-for-ci 
-
-      - name: Wait for Django server
-        uses: jakejarvis/wait-action@v1
-        with:
-          url: 'http://localhost:8080'
+          SECRET_KEY: dummy-secret-for-ci
 
       - name: Run Cypress tests
         uses: cypress-io/github-action@v6
