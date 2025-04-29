@@ -9,7 +9,6 @@ jobs:
   zap_scan:
     name: ZAP Baseline Scan
     runs-on: ubuntu-latest
-    continue-on-error: true 
 
     steps:
       - name: Checkout repository
@@ -29,15 +28,3 @@ jobs:
         with:
           target: 'http://localhost:8080' 
           cmd_options: '-t 60 -I -J zap-report.json -x zap-report.xml'
-
-      - name: Upload ZAP JSON report
-        uses: actions/upload-artifact@v3
-        with:
-            name: zap-json-report
-            path: zap-report.json
-  
-      - name: Upload ZAP XML report
-        uses: actions/upload-artifact@v3
-        with:
-            name: zap-xml-report
-            path: zap-report.xml
