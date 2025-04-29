@@ -26,7 +26,7 @@ jobs:
       - name: Extract short SHA
         id: vars
         run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-
+        
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
