@@ -5,6 +5,11 @@ on: [push]
 jobs:
   docker:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -26,31 +31,32 @@ jobs:
       - name: Extract short SHA
         id: vars
         run: echo "SHORT_SHA=$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
-        
-      - name: Build and push
-        uses: docker/build-push-action@v6
-        with:
-          push: true
-          tags: |
-            ${{ secrets.DOCKER_USERNAME }}/isen-python:latest
-            ${{ secrets.DOCKER_USERNAME }}/isen-python:dev-${{ env.SHORT_SHA }}
 
-      - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@2
+      - name: Authenticate to Google Cloud
+        uses: 'google-github-actions/auth@v2'
         with:
-          project_id: ancient-wave-458212-n3
-          service_account_key: ${{ secrets.SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true 
+          credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
 
-      - name: Configure Docker to use Artifact Registry
-        run: |
-          gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
-          
-      - name: Build and push to Artifact Registry
+      - name: Configure Docker for Artifact Registry
+        run: gcloud auth configure-docker europe-west1-docker.pkg.dev --quiet
+
+      - name: Build and push Docker images
         uses: docker/build-push-action@v6
         with:
           context: ./project
           push: true
           tags: |
+            ${{ secrets.DOCKER_USERNAME }}/isen-python:latest
+            ${{ secrets.DOCKER_USERNAME }}/isen-python:dev-${{ env.SHORT_SHA }}
             europe-west1-docker.pkg.dev/ancient-wave-458212-n3/docker-repo/isen-python:latest
             europe-west1-docker.pkg.dev/ancient-wave-458212-n3/docker-repo/isen-python:dev-${{ env.SHORT_SHA }}
+
+      - id: deploy
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: 'hello-cloud-run'
+          image: 'europe-west1-docker.pkg.dev/ancient-wave-458212-n3/docker-repo/isen-python:latest'
+          region: 'europe-west1'
+
+      - name: Use output
+        run: curl "${{ steps.deploy.outputs.url }}"
